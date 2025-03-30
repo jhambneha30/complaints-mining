@@ -6,7 +6,7 @@ import seaborn as sns #seaborn-0.13.2
 ## Read the raw data
 raw_df = pd.read_csv('data/AxionRay_assignment.csv')
 
-########### Data Cleaning ###########
+########### Data Cleaning: starts ###########
 ## Check the first few rows
 raw_df.head()
 print(raw_df.shape)
@@ -50,11 +50,11 @@ complaints_df = raw_df.copy()
 del(raw_df) # delete the raw_df to free up memory
 complaints_df.to_csv('data/complaints_df.csv', index=False)
 
-########### Data Exploration ###########
+########### Data Exploration: starts ###########
 complaints_df.head()
 
 # Create a new column for time difference (days) between BUILD_DATE and IN_USE_DATE
-complaints_df['Days_to_Use'] = (complaints_df['IN_USE_DATE'] - complaints_df['BUILD_DATE']).dt.days
+complaints_df['Days_to_Use'] = (complaints_df['IN_USE_DATE'] - complaints_df['Opened date']).dt.days
 
 # List of critical columns based on stakeholder insight requirements
 critical_columns = ['Opened date', 'BUILD_DATE', 'IN_USE_DATE', 'Days_to_Use',
@@ -70,25 +70,29 @@ plt.figure(figsize=(12, 4))
 plt.subplot(1, 3, 1)
 sns.histplot(complaints_df['Opened date'].dropna(), bins=20, kde=True)
 plt.title("Opened Date Distribution")
-plt.xlabel("Opened Date")
+plt.xlabel("Opened Date", fontsize=10)
+plt.xticks(rotation=45, fontsize=8)
 
 plt.subplot(1, 3, 2)
 sns.histplot(complaints_df['BUILD_DATE'].dropna(), bins=20, kde=True, color='green')
 plt.title("Build Date Distribution")
-plt.xlabel("Build Date")
+plt.xlabel("Build Date", fontsize=10)
+plt.xticks(rotation=45, fontsize=8)
 
 plt.subplot(1, 3, 3)
 sns.histplot(complaints_df['IN_USE_DATE'].dropna(), bins=20, kde=True, color='orange')
 plt.title("In Use Date Distribution")
-plt.xlabel("In Use Date")
+plt.xlabel("In Use Date", fontsize=10)
+plt.xticks(rotation=45, fontsize=8)
 plt.tight_layout()
 plt.show()
 
 # Plot the distribution of the Days_to_Use column
 plt.figure(figsize=(8, 4))
 sns.boxplot(x=complaints_df['Days_to_Use'])
-plt.title("Distribution of Days to Use (In Use - Build)")
-plt.xlabel("Days to Use")
+plt.title("Distribution of Days to Use (In Use - Opened)")
+plt.xlabel("Days to Use", fontsize=10)
+plt.xticks(rotation=45, fontsize=8)
 plt.show()
 
 # Categorical variables: Distribution of MAKE, MODEL, and PLANT (only top 10 for clarity)
@@ -101,7 +105,3 @@ for col in categorical_cols:
     plt.xticks(rotation=45)
     plt.show()
 
-# For complaint related columns, print value counts
-for col in ['CAUSAL_CD_DESC', 'COMPLAINT_CD_DESC', 'Failure Component', 'Failure Condition']:
-    print(f"\nValue counts for {col}:")
-    print(complaints_df[col].value_counts().head(10))

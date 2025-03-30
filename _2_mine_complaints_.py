@@ -15,7 +15,7 @@ tokenizer = AutoTokenizer.from_pretrained(MODEL_TO_MINE)
 # Load the cleaned complaints data.
 complaints_df = pd.read_csv('data/complaints_df.csv')
 complaints_df_processed = complaints_df.head(5)
-complaints_df = complaints_df[5:15]
+complaints_df = complaints_df[5:]
 print(complaints_df.columns.dtype)
 print(complaints_df.head(2))
 
@@ -183,14 +183,12 @@ def generate_issue_details(row, prompt_type):
 # Define free-text columns for generating tags.
 free_text_columns = ["CAUSAL_VERBATIM", "CORRECTION_VERBATIM", "CUSTOMER_VERBATIM"]
 
-
-
 for idx, row in complaints_df.iterrows():
     #print(row)
     for col in target_columns:
         complaints_df.at[idx, col] = generate_issue_details(row, col)
 
-# Display enhanced DataFrame columns for stakeholder insights.
+# Display enhanced DataFrame columns with generated target details
 print("Enhanced DataFrame with generated details and issue category:")
 display_cols = free_text_columns + target_columns
 print(complaints_df[target_columns].head(5))
